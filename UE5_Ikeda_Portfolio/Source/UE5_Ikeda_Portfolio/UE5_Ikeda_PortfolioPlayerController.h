@@ -8,6 +8,7 @@
 
 class UInputMappingContext;
 class UUserWidget;
+class UMainUI;
 
 /**
  *  Simple first person Player Controller
@@ -54,4 +55,10 @@ protected:
 
 	/** Returns true if the player should use UMG touch controls */
 	bool ShouldUseTouchControls() const;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UMainUI>MainUIClass = nullptr;
+
+	UPROPERTY()
+	TObjectPtr<UMainUI>MainUIInstance = nullptr;
 };

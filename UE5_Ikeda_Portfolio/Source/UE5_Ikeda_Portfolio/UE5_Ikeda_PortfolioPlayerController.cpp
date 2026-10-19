@@ -9,6 +9,8 @@
 #include "Blueprint/UserWidget.h"
 #include "UE5_Ikeda_Portfolio.h"
 #include "Widgets/Input/SVirtualJoystick.h"
+#include "MainUI.h"
+#include "Blueprint/UserWidget.h"
 
 AUE5_Ikeda_PortfolioPlayerController::AUE5_Ikeda_PortfolioPlayerController()
 {
@@ -38,6 +40,19 @@ void AUE5_Ikeda_PortfolioPlayerController::BeginPlay()
 
 		}
 
+	}
+
+	if (MainUIClass == nullptr)
+	{
+		UE_LOG(LogUE5_Ikeda_Portfolio, Error, TEXT("MainUIClass is NOT assigned in PlayerController."));
+		return;
+	}
+
+	MainUIInstance = CreateWidget<UMainUI>(this, MainUIClass);
+
+	if (MainUIInstance)
+	{
+		MainUIInstance->AddToViewport();
 	}
 }
 
