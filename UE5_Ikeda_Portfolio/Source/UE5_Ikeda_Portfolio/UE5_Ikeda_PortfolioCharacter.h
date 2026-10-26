@@ -76,6 +76,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
 
+	void Interact( );
+
 protected:
 
 	/** Set up input action bindings */

@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "InteractableInterface.h"
 #include "UE5_Ikeda_Portfolio.h"
 
 AUE5_Ikeda_PortfolioCharacter::AUE5_Ikeda_PortfolioCharacter()
@@ -117,4 +118,35 @@ void AUE5_Ikeda_PortfolioCharacter::DoJumpEnd()
 {
 	// pass StopJumping to the character
 	StopJumping();
+}
+
+//インタラクト
+void AUE5_Ikeda_PortfolioCharacter::Interact( ) {
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	GetActorEyesViewPoint( CameraLocation, CameraRotation );
+
+	FVector TraceEnd = CameraLocation + ( CameraRotation.Vector( ) * 300.0f ); // 3メートル前方
+
+	FHitResult HitResult;
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor( this );
+
+	bool bHit = GetWorld( )->LineTraceSingleByChannel(
+		HitResult,
+		CameraLocation,
+		TraceEnd,
+		ECC_Visibility,
+		QueryParams
+	);
+
+	if ( bHit && HitResult.GetActor( ) ) {
+		AActor* HitActor = HitResult.GetActor( );
+
+		// ヒットしたアクターがインターフェースを保持しているか確認
+		if ( HitActor->Implements<UInteractableInterface>( ) ) {
+			// インターフェース経由で Interact 関数を実行
+			IInteractableInterface::Execute_Interact( HitActor, this );
+		}
+	}
 }
