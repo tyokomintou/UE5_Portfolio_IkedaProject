@@ -9,7 +9,7 @@
 
 class ASwitch;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams( FOnSwitchStateChanged, ASwitch*, SwitchActor, bool, bNewState );
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSwitchStateChanged, ASwitch*, SwitchActor, bool, bNewState);
 
 UCLASS( )
 class UE5_IKEDA_PORTFOLIO_API ASwitch : public AActor, public IInteractableInterface {
@@ -17,6 +17,7 @@ class UE5_IKEDA_PORTFOLIO_API ASwitch : public AActor, public IInteractableInter
 
 public:
 	ASwitch( );
+	bool IsOn() const { return bIsOn; }
 
 	virtual void Interact_Implementation( AActor* Interactor ) override;
 

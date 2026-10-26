@@ -9,6 +9,7 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "InteractableInterface.h"
+#include "DrawDebugHelpers.h"
 #include "UE5_Ikeda_Portfolio.h"
 
 AUE5_Ikeda_PortfolioCharacter::AUE5_Ikeda_PortfolioCharacter()
@@ -60,6 +61,9 @@ void AUE5_Ikeda_PortfolioCharacter::SetupPlayerInputComponent(UInputComponent* P
 		// Looking/Aiming
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE5_Ikeda_PortfolioCharacter::LookInput);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AUE5_Ikeda_PortfolioCharacter::LookInput);
+	
+		// Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AUE5_Ikeda_PortfolioCharacter::InteractInput);
 	}
 	else
 	{
@@ -120,6 +124,10 @@ void AUE5_Ikeda_PortfolioCharacter::DoJumpEnd()
 	StopJumping();
 }
 
+void AUE5_Ikeda_PortfolioCharacter::InteractInput(const FInputActionValue& Value) {
+	Interact();
+}
+
 //インタラクト
 void AUE5_Ikeda_PortfolioCharacter::Interact( ) {
 	FVector CameraLocation;
@@ -139,6 +147,8 @@ void AUE5_Ikeda_PortfolioCharacter::Interact( ) {
 		ECC_Visibility,
 		QueryParams
 	);
+
+	//DrawDebugLine(GetWorld(), CameraLocation, TraceEnd, FColor::Red, false, 2.0f, 0, 1.0f);
 
 	if ( bHit && HitResult.GetActor( ) ) {
 		AActor* HitActor = HitResult.GetActor( );

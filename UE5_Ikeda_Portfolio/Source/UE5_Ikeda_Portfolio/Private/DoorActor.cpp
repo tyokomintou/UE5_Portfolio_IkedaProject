@@ -3,7 +3,13 @@
 
 #include "DoorActor.h"
 
-void ADoorActor::OnTriggerSuccessImplementation( ) {
-	Super::OnTriggerSuccessImplementation( );
+void ADoorActor::OnTriggerSuccess_Implementation( ) {
+	Super::OnTriggerSuccess_Implementation( );
 	OpenDoor( );
+	
+}
+
+void ADoorActor:: OpenDoor() {
+	FVector NewLocation = GetActorLocation() + FVector(Move);
+	SetActorRelativeLocation(NewLocation);
 }

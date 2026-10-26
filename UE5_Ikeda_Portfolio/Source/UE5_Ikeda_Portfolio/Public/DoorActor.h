@@ -14,10 +14,13 @@ class UE5_IKEDA_PORTFOLIO_API ADoorActor : public AInteractiveActorBase
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void OnTriggerSuccessImplementation( ) override;
+public:
+	UPROPERTY(EditInstanceOnly, category = "Door")
+	FVector Move = FVector(0.0f, 0.0f, 0.0f);
 
-	UFUNCTION(BlueprintImplementableEvent, category = "Door" )
+protected:
+	virtual void OnTriggerSuccess_Implementation( ) override;
+
 	void OpenDoor( );
-	
+
 };

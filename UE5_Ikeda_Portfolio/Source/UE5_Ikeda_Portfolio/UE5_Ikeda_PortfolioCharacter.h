@@ -49,6 +49,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category ="Input")
 	class UInputAction* MouseLookAction;
 	
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputAction* InteractAction;
 public:
 	AUE5_Ikeda_PortfolioCharacter();
 
@@ -76,7 +78,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
 
+	virtual void InteractInput(const FInputActionValue& Value);
+
 	void Interact( );
+
 
 protected:
 

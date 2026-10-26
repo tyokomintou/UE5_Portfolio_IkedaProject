@@ -44,19 +44,31 @@ void AInteractiveActorBase::HandleSwitchStateChanged( ASwitch* ChangedSwitch, bo
 }
 
 bool AInteractiveActorBase::CheckConditions( ) {
-	if ( CurrentActivatedOrder.Num( ) != RequiredSwitches.Num( ) ) {
-		return false;
-	}
-
-	for ( int32 i = 0; i < RequiredSwitches.Num( ); ++i ) {
-		if ( CurrentActivatedOrder[ i ] != RequiredSwitches[ i ] ) {
+	if (checkConditions) {
+		if (CurrentActivatedOrder.Num() != RequiredSwitches.Num()) {
 			return false;
 		}
-	}
 
+		for (int32 i = 0; i < RequiredSwitches.Num(); ++i) {
+			if (CurrentActivatedOrder[i] != RequiredSwitches[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	else {
+		for (ASwitch* SwitchActor : RequiredSwitches)
+		{
+			if (SwitchActor && !SwitchActor->IsOn())
+			{
+				return false;
+			}
+		}
+	}
 	return true;
 }
 
-void AInteractiveActorBase::OnTriggerSuccessImplementation( ) {
+void AInteractiveActorBase::OnTriggerSuccess_Implementation( ) {
 	UE_LOG( LogTemp, Log, TEXT( "Puzzle Cleared!" ) );
 }

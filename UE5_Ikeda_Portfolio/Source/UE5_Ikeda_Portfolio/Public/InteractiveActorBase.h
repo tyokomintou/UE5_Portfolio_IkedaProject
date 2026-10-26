@@ -24,15 +24,18 @@ protected:
 	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, Category = "Puzzle" )
 	TArray<ASwitch*> RequiredSwitches; 
 
-	UFUNCTION()
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Puzzle")
+	bool checkConditions;
+
 	void HandleSwitchStateChanged( ASwitch* ChangedSwitch, bool bNewState );
 
 	//起動するSwitchと起動する順番をチェックする
 	virtual bool CheckConditions( );
 
-	UFUNCTION( BlieprintNativeEvent, Category = "Puzzle" )
 	void OnTriggerSuccess( );
-	virtual void OnTriggerSuccessImplementation( );
+
+	virtual void OnTriggerSuccess_Implementation( );
+
 
 private:
 	UPROPERTY()
