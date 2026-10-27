@@ -27,11 +27,13 @@ protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Puzzle")
 	bool checkConditions;
 
+	UFUNCTION( )
 	void HandleSwitchStateChanged( ASwitch* ChangedSwitch, bool bNewState );
 
 	//起動するSwitchと起動する順番をチェックする
 	virtual bool CheckConditions( );
 
+	UFUNCTION( BlueprintNativeEvent, Category = "Puzzle" )
 	void OnTriggerSuccess( );
 
 	virtual void OnTriggerSuccess_Implementation( );

@@ -15,7 +15,7 @@ class UE5_IKEDA_PORTFOLIO_API ADoorActor : public AInteractiveActorBase
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditInstanceOnly, category = "Door")
+	UPROPERTY(EditInstanceOnly, Category = "Door")
 	FVector Move = FVector(0.0f, 0.0f, 0.0f);
 
 protected:

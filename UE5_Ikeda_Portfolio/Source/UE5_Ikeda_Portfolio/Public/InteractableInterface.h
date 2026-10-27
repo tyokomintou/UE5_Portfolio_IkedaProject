@@ -13,5 +13,6 @@ class UE5_IKEDA_PORTFOLIO_API IInteractableInterface {
 	GENERATED_BODY( )
 
 public:
+	UFUNCTION( BlueprintNativeEvent, BlueprintCallable, Category = "Interaction" )
 	void Interact( AActor* Interactor );
 };
