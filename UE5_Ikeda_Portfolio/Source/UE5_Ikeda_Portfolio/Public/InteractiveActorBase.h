@@ -36,7 +36,11 @@ protected:
 	UFUNCTION( BlueprintNativeEvent, Category = "Puzzle" )
 	void OnTriggerSuccess( );
 
+	UFUNCTION(BlueprintNativeEvent, Category = "Puzzle")
+	void OnTriggerFail();
+
 	virtual void OnTriggerSuccess_Implementation( );
+	virtual void OnTriggerFail_Implementation();
 
 
 private:

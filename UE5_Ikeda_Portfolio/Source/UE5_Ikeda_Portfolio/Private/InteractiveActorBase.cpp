@@ -41,6 +41,9 @@ void AInteractiveActorBase::HandleSwitchStateChanged( ASwitch* ChangedSwitch, bo
 	if ( CheckConditions( ) ) {
 		OnTriggerSuccess( );
 	}
+	else {
+		OnTriggerFail();
+	}
 }
 
 bool AInteractiveActorBase::CheckConditions( ) {
@@ -71,4 +74,8 @@ bool AInteractiveActorBase::CheckConditions( ) {
 
 void AInteractiveActorBase::OnTriggerSuccess_Implementation( ) {
 	UE_LOG( LogTemp, Log, TEXT( "Puzzle Cleared!" ) );
+}
+
+void AInteractiveActorBase::OnTriggerFail_Implementation() {
+	UE_LOG(LogTemp, Log, TEXT("Puzzle Cleared!"));
 }

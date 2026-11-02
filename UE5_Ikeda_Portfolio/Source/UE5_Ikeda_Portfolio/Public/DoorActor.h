@@ -18,9 +18,15 @@ public:
 	UPROPERTY(EditInstanceOnly, Category = "Door")
 	FVector Move = FVector(0.0f, 0.0f, 0.0f);
 
+private:
+	UPROPERTY()
+	bool isOpened = false;
+
 protected:
 	virtual void OnTriggerSuccess_Implementation( ) override;
+	virtual void OnTriggerFail_Implementation() override;
 
 	void OpenDoor( );
+	void CloseDoor( );
 
 };
