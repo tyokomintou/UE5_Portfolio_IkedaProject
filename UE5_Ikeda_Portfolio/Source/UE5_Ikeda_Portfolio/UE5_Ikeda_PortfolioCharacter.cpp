@@ -63,7 +63,7 @@ void AUE5_Ikeda_PortfolioCharacter::SetupPlayerInputComponent(UInputComponent* P
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &AUE5_Ikeda_PortfolioCharacter::LookInput);
 	
 		// Interact
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AUE5_Ikeda_PortfolioCharacter::InteractInput);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AUE5_Ikeda_PortfolioCharacter::InteractInput);
 	}
 	else
 	{

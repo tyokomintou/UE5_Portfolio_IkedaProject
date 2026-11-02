@@ -23,8 +23,8 @@ private:
 	bool isOpened = false;
 
 protected:
-	virtual void OnTriggerSuccess_Implementation( ) override;
-	virtual void OnTriggerFail_Implementation() override;
+	virtual void OnTriggerSuccess() override;
+	virtual void OnTriggerFail() override;
 
 	void OpenDoor( );
 	void CloseDoor( );

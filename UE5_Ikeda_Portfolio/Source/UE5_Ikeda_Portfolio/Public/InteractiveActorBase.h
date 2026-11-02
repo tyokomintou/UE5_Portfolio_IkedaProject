@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Switch.h"
+#include "Camera/CameraActor.h"
 #include "InteractiveActorBase.generated.h"
 
 UCLASS()
@@ -21,10 +22,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	//このアクターがレベル上のどのSwitchで起動するかの配列
-	UPROPERTY( EditInstanceOnly, BlueprintReadOnly, Category = "Puzzle" )
+	UPROPERTY( EditInstanceOnly, Category = "Puzzle" )
 	TArray<ASwitch*> RequiredSwitches; 
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Puzzle")
+	UPROPERTY(EditInstanceOnly, Category = "Puzzle")
 	bool checkConditions;
 
 	UFUNCTION( )
@@ -33,14 +34,34 @@ protected:
 	//起動するSwitchと起動する順番をチェックする
 	virtual bool CheckConditions( );
 
-	UFUNCTION( BlueprintNativeEvent, Category = "Puzzle" )
-	void OnTriggerSuccess( );
+	virtual void OnTriggerSuccess( );
+	virtual void OnTriggerFail();
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Puzzle")
-	void OnTriggerFail();
+	//インタラクト後のカメライベント
 
-	virtual void OnTriggerSuccess_Implementation( );
-	virtual void OnTriggerFail_Implementation();
+	UPROPERTY(EditInstanceOnly,  Category = "CameraEvent")
+	ACameraActor* TargetCameraActor;
+
+	UPROPERTY(EditAnywhere, Category = "CameraEvent")
+	float CameraFadeInTime = 0.5f;
+
+	UPROPERTY(EditAnywhere, Category = "CameraEvent")
+	float CameraFadeOutTime = 0.5f;
+
+	UPROPERTY(EditAnywhere, Category = "CameraEvent")
+	float CameraEventTime = 2.0f;
+
+	UPROPERTY(VisibleAnywhere, Category = "CameraEvent")
+	FTimerHandle CameraEventTimerHandle;
+
+	UPROPERTY(EditAnywhere, Category = "CameraEvent")
+	bool bDisableInputDuring = true;
+
+	void StartCameraEvent();
+	void SwitchToTargetCamera();
+	void EndCameraEvent();
+	void SwitchToPlayerCamera();
+
 
 
 private:

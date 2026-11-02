@@ -3,17 +3,18 @@
 
 #include "DoorActor.h"
 
-void ADoorActor::OnTriggerSuccess_Implementation( ) {
-	Super::OnTriggerSuccess_Implementation( );
+void ADoorActor::OnTriggerSuccess( ) {
+	Super::OnTriggerSuccess( );
 
 	if (!isOpened) {
 		OpenDoor();
+		StartCameraEvent();
 	}
 	
 }
 
-void ADoorActor::OnTriggerFail_Implementation() {
-	Super::OnTriggerFail_Implementation();
+void ADoorActor::OnTriggerFail() {
+	Super::OnTriggerFail();
 
 	if (isOpened)
 	{
@@ -25,6 +26,7 @@ void ADoorActor:: OpenDoor() {
 	isOpened = true;
 	FVector NewLocation = GetActorLocation() + FVector(Move);
 	SetActorRelativeLocation(NewLocation);
+
 }
 
 void ADoorActor::CloseDoor() {

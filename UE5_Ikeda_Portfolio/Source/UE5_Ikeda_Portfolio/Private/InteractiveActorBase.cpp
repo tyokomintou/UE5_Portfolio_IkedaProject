@@ -2,6 +2,9 @@
 
 
 #include "InteractiveActorBase.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
+#include "Camera/PlayerCameraManager.h"
 
 // Sets default values
 AInteractiveActorBase::AInteractiveActorBase()
@@ -72,10 +75,106 @@ bool AInteractiveActorBase::CheckConditions( ) {
 	return true;
 }
 
-void AInteractiveActorBase::OnTriggerSuccess_Implementation( ) {
+void AInteractiveActorBase::OnTriggerSuccess( ) {
 	UE_LOG( LogTemp, Log, TEXT( "Puzzle Cleared!" ) );
 }
 
-void AInteractiveActorBase::OnTriggerFail_Implementation() {
+void AInteractiveActorBase::OnTriggerFail() {
 	UE_LOG(LogTemp, Log, TEXT("Puzzle Cleared!"));
+}
+
+
+void AInteractiveActorBase::StartCameraEvent() {
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if (!PC || !TargetCameraActor) return;
+
+	if (bDisableInputDuring && PC->GetPawn())
+	{
+		PC->GetPawn()->DisableInput(PC);
+	}
+
+	// 画面を黒へフェードアウト (Alpha 0.0 -> 1.0)
+	if (PC->PlayerCameraManager)
+	{
+		PC->PlayerCameraManager->StartCameraFade(0.0f, 1.0f, CameraFadeInTime, FLinearColor::Black, false, true);
+	}
+
+	// フェードアウト完了後に視点を切り替えるタイマー
+	GetWorldTimerManager().SetTimer(
+		CameraEventTimerHandle,
+		this,
+		&AInteractiveActorBase::SwitchToTargetCamera,
+		CameraFadeInTime,
+		false
+	);
+
+}
+
+void AInteractiveActorBase::SwitchToTargetCamera(){ 
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if (!PC || !TargetCameraActor) return;
+
+	PC->SetViewTarget(TargetCameraActor);
+
+	// 画面を黒へフェードアウト (Alpha 1.0 -> 0.0)
+	if (PC->PlayerCameraManager)
+	{
+		PC->PlayerCameraManager->StartCameraFade(1.0f, 0.0f, CameraFadeInTime, FLinearColor::Black, false, true);
+	}
+
+	// フェードアウト完了後に視点を切り替えるタイマー
+	GetWorldTimerManager().SetTimer(
+		CameraEventTimerHandle,
+		this,
+		&AInteractiveActorBase::EndCameraEvent,
+		CameraFadeInTime,
+		false
+	);
+
+}
+
+void AInteractiveActorBase::EndCameraEvent() {
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if (!PC) return;
+
+
+
+	// 画面を黒へフェードアウト (Alpha 0.0 -> 1.0)
+	if (PC->PlayerCameraManager)
+	{
+		PC->PlayerCameraManager->StartCameraFade(0.0f, 1.0f, CameraFadeInTime, FLinearColor::Black, false, true);
+	}
+
+	// フェードアウト完了後に視点を切り替えるタイマー
+	GetWorldTimerManager().SetTimer(
+		CameraEventTimerHandle,
+		this,
+		&AInteractiveActorBase::SwitchToPlayerCamera,
+		CameraFadeInTime,
+		false
+	);
+
+}
+
+void AInteractiveActorBase::SwitchToPlayerCamera() {
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if (!PC) return;
+
+	APawn* PlayerPawn = PC->GetPawn();
+	if (PlayerPawn)
+	{
+		PC->SetViewTarget(PlayerPawn);
+
+		if (bDisableInputDuring)
+		{
+			PlayerPawn->EnableInput(PC);
+		}
+	}
+
+	if (PC->PlayerCameraManager)
+	{
+		PC->PlayerCameraManager->StartCameraFade(1.0f, 0.0f, CameraFadeInTime, FLinearColor::Black, false, true);
+	}
+
+
 }
