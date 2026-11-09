@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "InteractableInterface.h"
 #include "Switch.generated.h"
 
@@ -17,6 +19,8 @@ class UE5_IKEDA_PORTFOLIO_API ASwitch : public AActor, public IInteractableInter
 
 public:
 	ASwitch( );
+	virtual void Tick( float DeltaTime ) override;
+
 	bool IsOn() const { return bIsOn; }
 
 	virtual void Interact_Implementation( AActor* Interactor ) override;
@@ -30,6 +34,21 @@ protected:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Switch" )
 	bool bIsOn = false;
 
-public:
-	virtual void Tick( float DeltaTime ) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Switch|Components" )
+	UStaticMeshComponent* SwitchMesh;
+
+	UPROPERTY( EditAnywhere, Category = "Switch|Color")
+	FLinearColor OffColor = FLinearColor::Red;
+
+	UPROPERTY(EditAnywhere, Category = "Switch|Color")
+	FLinearColor OnColor = FLinearColor::Green;
+
+	UPROPERTY(EditAnywhere, Category = "Switch|Color")
+	FName ColorParamName = FName("BaseColor");
+
+private:
+	UPROPERTY()
+	UMaterialInstanceDynamic* DynamicMaterial;
+
+	void UpdateSwitchColor();
 };

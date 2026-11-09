@@ -3,6 +3,27 @@
 
 #include "DoorActor.h"
 
+ADoorActor::ADoorActor() {
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+void ADoorActor::BeginPlay( ) {
+	Super::BeginPlay();
+	InitialLocation = GetActorLocation();
+	TargetLocation = InitialLocation;
+}
+
+void ADoorActor::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+
+	FVector CurrentLocation = GetActorLocation();
+
+	if (!CurrentLocation.Equals(TargetLocation, 0.1f)) {
+		FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaTime, MoveSpeed);
+		SetActorLocation(NewLocation);
+	}
+}
+
 void ADoorActor::OnTriggerSuccess( ) {
 	Super::OnTriggerSuccess( );
 
@@ -24,13 +45,11 @@ void ADoorActor::OnTriggerFail() {
 
 void ADoorActor:: OpenDoor() {
 	isOpened = true;
-	FVector NewLocation = GetActorLocation() + FVector(Move);
-	SetActorRelativeLocation(NewLocation);
+	TargetLocation = InitialLocation + Move;
 
 }
 
 void ADoorActor::CloseDoor() {
 	isOpened = false;
-	FVector NewLocation = GetActorLocation() - FVector(Move);
-	SetActorRelativeLocation(NewLocation);
+	TargetLocation = InitialLocation;
 }
