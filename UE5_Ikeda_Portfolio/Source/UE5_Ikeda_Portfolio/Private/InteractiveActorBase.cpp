@@ -83,7 +83,7 @@ void AInteractiveActorBase::OnTriggerFail() {
 	UE_LOG(LogTemp, Log, TEXT("Puzzle Cleared!"));
 }
 
-
+//イベント発動時にフェードアウトし、登録したカメラアクターに視点を切り替える
 void AInteractiveActorBase::StartCameraEvent() {
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 	if (!PC || !TargetCameraActor) return;
@@ -93,13 +93,11 @@ void AInteractiveActorBase::StartCameraEvent() {
 		PC->GetPawn()->DisableInput(PC);
 	}
 
-	// 画面を黒へフェードアウト (Alpha 0.0 -> 1.0)
 	if (PC->PlayerCameraManager)
 	{
 		PC->PlayerCameraManager->StartCameraFade(0.0f, 1.0f, CameraFadeInTime, FLinearColor::Black, false, true);
 	}
 
-	// フェードアウト完了後に視点を切り替えるタイマー
 	GetWorldTimerManager().SetTimer(
 		CameraEventTimerHandle,
 		this,
@@ -110,19 +108,18 @@ void AInteractiveActorBase::StartCameraEvent() {
 
 }
 
+//カメラに視点が移った後のフェードイン
 void AInteractiveActorBase::SwitchToTargetCamera(){ 
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 	if (!PC || !TargetCameraActor) return;
 
 	PC->SetViewTarget(TargetCameraActor);
 
-	// 画面を黒へフェードアウト (Alpha 1.0 -> 0.0)
 	if (PC->PlayerCameraManager)
 	{
 		PC->PlayerCameraManager->StartCameraFade(1.0f, 0.0f, CameraFadeInTime, FLinearColor::Black, false, true);
 	}
 
-	// フェードアウト完了後に視点を切り替えるタイマー
 	GetWorldTimerManager().SetTimer(
 		CameraEventTimerHandle,
 		this,
@@ -133,19 +130,16 @@ void AInteractiveActorBase::SwitchToTargetCamera(){
 
 }
 
+//カメラからプレイヤーへ視点が切り替わるときのフェードアウト
 void AInteractiveActorBase::EndCameraEvent() {
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 	if (!PC) return;
 
-
-
-	// 画面を黒へフェードアウト (Alpha 0.0 -> 1.0)
 	if (PC->PlayerCameraManager)
 	{
 		PC->PlayerCameraManager->StartCameraFade(0.0f, 1.0f, CameraFadeInTime, FLinearColor::Black, false, true);
 	}
 
-	// フェードアウト完了後に視点を切り替えるタイマー
 	GetWorldTimerManager().SetTimer(
 		CameraEventTimerHandle,
 		this,
@@ -156,6 +150,7 @@ void AInteractiveActorBase::EndCameraEvent() {
 
 }
 
+//カメラからプレイヤーへ視点が移動した後のフェードイン	
 void AInteractiveActorBase::SwitchToPlayerCamera() {
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 	if (!PC) return;
