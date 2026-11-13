@@ -34,9 +34,6 @@ protected:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Switch" )
 	bool bIsOn = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Switch|Components" )
-	UStaticMeshComponent* SwitchMesh;
-
 	UPROPERTY( EditAnywhere, Category = "Switch|Color")
 	FLinearColor OffColor = FLinearColor::Red;
 
@@ -47,6 +44,9 @@ protected:
 	FName ColorParamName = FName("BaseColor");
 
 private:
+	UPROPERTY( )
+	UStaticMeshComponent* SwitchMesh;
+
 	UPROPERTY()
 	UMaterialInstanceDynamic* DynamicMaterial;
 

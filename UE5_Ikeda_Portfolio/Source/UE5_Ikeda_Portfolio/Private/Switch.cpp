@@ -1,6 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Switch.h"
+#include "Materials/MaterialInterface.h"
 
 ASwitch::ASwitch( ) {
 	PrimaryActorTick.bCanEverTick = true;
@@ -9,18 +8,20 @@ ASwitch::ASwitch( ) {
 void ASwitch::BeginPlay( ) {
 	Super::BeginPlay( );
 
-	if (SwitchMesh && SwitchMesh->GetMaterial(0)) {
-		DynamicMaterial = SwitchMesh->CreateAndSetMaterialInstanceDynamic(0);
-	}
-	else
-	{
-		UStaticMeshComponent* FoundMesh = FindComponentByClass<UStaticMeshComponent>();
-		if (FoundMesh && FoundMesh->GetMaterial(0)) {
-			SwitchMesh = FoundMesh;
-			DynamicMaterial = SwitchMesh->CreateAndSetMaterialInstanceDynamic(0);
+	TArray<UStaticMeshComponent*> MeshComponents;
+	GetComponents<UStaticMeshComponent>( MeshComponents );
+
+	for ( UStaticMeshComponent* Mesh : MeshComponents ) {
+		if ( !Mesh ) continue;
+
+		UMaterialInterface* Mat = Mesh->GetMaterial( 0 );
+		if ( Mat && Mat->GetName( ).Contains( TEXT( "SwitchButtom" ) ) ) {
+			SwitchMesh = Mesh;
+			DynamicMaterial = SwitchMesh->CreateAndSetMaterialInstanceDynamic( 0 );
+			break;
 		}
 	}
-	UpdateSwitchColor();
+	UpdateSwitchColor( );
 }
 
 void ASwitch::Tick( float DeltaTime ) {
@@ -30,12 +31,12 @@ void ASwitch::Tick( float DeltaTime ) {
 void ASwitch::Interact_Implementation( AActor* Interactor ) {
 	bIsOn = !bIsOn;
 	OnSwitchStateChanged.Broadcast( this, bIsOn );
-	UpdateSwitchColor();
+	UpdateSwitchColor( );
 }
 
-void ASwitch::UpdateSwitchColor() {
-	if (DynamicMaterial) {
+void ASwitch::UpdateSwitchColor( ) {
+	if ( DynamicMaterial ) {
 		FLinearColor TargetColor = bIsOn ? OnColor : OffColor;
-		DynamicMaterial->SetVectorParameterValue(ColorParamName, TargetColor);
+		DynamicMaterial->SetVectorParameterValue( ColorParamName, TargetColor );
 	}
 }
